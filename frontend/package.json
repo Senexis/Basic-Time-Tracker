@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --port $PORT",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
-  "postinstall": "ng build --prod ",
+  "postinstall": "ng build --aot -prod",
   "private": true,
   "dependencies": {
     "@angular-devkit/build-angular": "~0.11.0",
