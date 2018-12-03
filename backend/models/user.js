@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
+const UniqueValidator = require('mongoose-unique-validator');
 const Schema = mongoose.Schema;
+const SchemaTypes = require('../components/schema_types_component');
 
 const UserSchema = new Schema({
     name: {
@@ -8,7 +10,9 @@ const UserSchema = new Schema({
     },
     email: {
         type: String,
-        required: [true, 'Email field is required.']
+        required: [true, 'Email field is required.'],
+        unique: true,
+        dropDups: true
     },
     password: {
         type: String,
@@ -17,10 +21,10 @@ const UserSchema = new Schema({
     reset_token: {
         type: String
     },
-    color: {
-        type: String
-    },
+    color: SchemaTypes.Color
 });
+
+UserSchema.plugin(UniqueValidator);
 
 const User = mongoose.model('user', UserSchema);
 

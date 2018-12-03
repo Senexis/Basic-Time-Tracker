@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
+const UniqueValidator = require('mongoose-unique-validator');
 const Schema = mongoose.Schema;
+const SchemaTypes = require('../components/schema_types_component');
 
 const ClientSchema = new Schema({
     linked_users: [{
@@ -8,12 +10,14 @@ const ClientSchema = new Schema({
     }],
     name: {
         type: String,
-        required: [true, 'Name field is required.']
+        required: [true, 'Name field is required.'],
+        unique: true,
+        dropDups: true
     },
-    color: {
-        type: String
-    },
+    color: SchemaTypes.Color
 });
+
+ClientSchema.plugin(UniqueValidator);
 
 const Client = mongoose.model('client', ClientSchema);
 

@@ -5,12 +5,12 @@ const TimeEntrySchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
         ref: 'user',
-        required: [true, 'User reference is required.']
+        // required: [true, 'User reference is required.']
     },
     client: {
         type: Schema.Types.ObjectId,
         ref: 'client',
-        required: [true, 'Client reference is required.']
+        // required: [true, 'Client reference is required.']
     },
     tags: [{
         type: Schema.Types.ObjectId,
@@ -21,10 +21,17 @@ const TimeEntrySchema = new Schema({
         required: [true, 'Started at field is required.'],
         default: Date.now
     },
+    is_running: {
+        type: Boolean,
+        default: true
+    },
     paused_at: {
         type: Date
     },
     resumed_at: {
+        type: Date
+    },
+    ended_at: {
         type: Date
     },
     time_worked: {

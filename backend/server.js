@@ -39,7 +39,8 @@ app.get('*', (req, res) => {
 });
 
 app.use((err, req, res, next) => {
-	res.status(err.code || 500).json(err);
+	console.error(err);
+	res.status(500).json({ error: err.message });
 });
 
 app.listen(process.env.PORT || 5000, () => {

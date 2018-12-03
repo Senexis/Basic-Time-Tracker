@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
+const UniqueValidator = require('mongoose-unique-validator');
 const Schema = mongoose.Schema;
+const SchemaTypes = require('../components/schema_types_component');
 
 const TagSchema = new Schema({
     linked_users: [{
@@ -8,12 +10,30 @@ const TagSchema = new Schema({
     }],
     name: {
         type: String,
-        required: [true, 'Name field is required.']
+        required: [true, 'Name field is required.'],
+        unique: true,
+        dropDups: true
     },
-    color: {
-        type: String
-    },
+    color: SchemaTypes.Color
 });
+
+TagSchema.statics.findOneOrCreate = function findOneOrCreate(find, create) {
+    const model = this;
+
+    return new Promise((resolve, reject) => {
+        model.findOne(find, (err, result) => {
+            if (err) return reject(err);
+            if (result) return resolve(result);
+
+            model.create(create, (err, result) => {
+                if (err) return reject(err);
+                resolve(result);
+            });
+        });
+    });
+}
+
+TagSchema.plugin(UniqueValidator);
 
 const Tag = mongoose.model('tag', TagSchema);
 

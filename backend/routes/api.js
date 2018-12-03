@@ -25,12 +25,14 @@ module.exports = (app) => {
     app.put('/api/time-entries/:id', TimeEntryController.edit);
     app.delete('/api/time-entries/:id', TimeEntryController.delete);
 
-    app.post('/api/time-entries/lock', TimeEntryController.multilock);
+    app.post('/api/time-entries/lock', TimeEntryController.multilock);      // Allows locking multiple time entries.
 
-    app.post('/api/time-entries/:id/pause', TimeEntryController.pause);
-    app.post('/api/time-entries/:id/resume', TimeEntryController.resume);
-    app.post('/api/time-entries/:id/stop', TimeEntryController.stop);
-    app.post('/api/time-entries/:id/lock', TimeEntryController.lock);
+    app.post('/api/time-entries/:id/tag', TimeEntryController.tag);         // Adds or creates a tag for the time entry.
+    app.post('/api/time-entries/:id/untag', TimeEntryController.untag);     // Remove a tag from the time entry.
+    app.post('/api/time-entries/:id/pause', TimeEntryController.pause);     // Pauses the time entries' timer.
+    app.post('/api/time-entries/:id/resume', TimeEntryController.resume);   // Resumes the time entries' timer if running.
+    app.post('/api/time-entries/:id/stop', TimeEntryController.stop);       // Permanently stops the time entries' timer.
+    app.post('/api/time-entries/:id/lock', TimeEntryController.lock);       // Locks the time entry if it's been stopped.
 
     // User endpoints
     app.get('/api/users', UserController.index);

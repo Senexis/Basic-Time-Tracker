@@ -1,3 +1,4 @@
+const Tag = require('../models/tag');
 const TimeEntry = require('../models/time_entry');
 
 module.exports = {
@@ -57,31 +58,221 @@ module.exports = {
         };
     },
 
+    tag(req, res, next) {
+        const id = req.params.id;
+        const properties = {
+            name: req.body.name
+        }
+
+        let refId;
+
+        TimeEntry.findById(id)
+            .orFail(() => Error('Not found'))
+            .then(() => Tag.findOneOrCreate(properties, properties))
+            .then(result => refId = result._id)
+            .then(() => TimeEntry.findByIdAndUpdate(id, {
+                "$push": {
+                    tags: refId
+                }
+            }))
+            .then(() => res.status(200).json({
+                message: 'Success.'
+            }))
+            .catch(next);
+    },
+
+    untag(req, res, next) {
+        const id = req.params.id;
+        const properties = {
+            name: req.body.name
+        }
+
+        let refId;
+
+        TimeEntry.findById(id)
+            .orFail(() => Error('Not found'))
+            .then(() => Tag.findOne(properties))
+            .then(result => {
+                if (result == undefined) return res.status(500).json({
+                    error: 'Not found'
+                });
+                refId = result._id;
+            })
+            .then(() => TimeEntry.findByIdAndUpdate(id, {
+                "$pull": {
+                    tags: refId
+                }
+            }, {
+                new: true
+            }))
+            .then(() => res.status(200).json({
+                message: 'Success.'
+            }))
+            .catch(next);
+    },
+
     pause(req, res, next) {
         const id = req.params.id;
         const properties = {
-            paused_at: req.body.paused_at
+            paused_at: Date.parse(req.body.paused_at) || Date.now()
         };
+
+        let timeToAdd = 0;
+
+        TimeEntry.findById(id)
+            .orFail(() => Error('Not found'))
+            .then(result => {
+                if (result.ended_at != null || result.locked_at != null) {
+                    return res.status(422).json({
+                        message: 'Time entry has ended or is locked.'
+                    });
+                }
+
+                if (result.is_running) {
+                    if (result.resumed_at == null) {
+                        timeToAdd = (properties.paused_at - result.started_at) / 1000;
+                    } else {
+                        timeToAdd = (properties.paused_at - result.resumed_at) / 1000;
+                    }
+
+                    timeToAdd = Math.round(timeToAdd);
+                } else {
+                    return res.status(422).json({
+                        message: 'Time entry is not running.'
+                    });
+                }
+            })
+            .then(() => TimeEntry.findByIdAndUpdate(id, {
+                $inc: {
+                    'time_worked': timeToAdd
+                },
+                $set: {
+                    'is_running': false,
+                    'paused_at': properties.paused_at
+                }
+            }))
+            .then(() => res.status(200).json({
+                message: 'Success.'
+            }))
+            .catch(next);
     },
 
     resume(req, res, next) {
         const id = req.params.id;
         const properties = {
-            resumed_at: req.body.resumed_at
+            resumed_at: Date.parse(req.body.resumed_at) || Date.now()
         };
+
+        TimeEntry.findById(id)
+            .orFail(() => Error('Not found'))
+            .then(result => {
+                if (result.ended_at != null || result.locked_at != null) {
+                    return res.status(422).json({
+                        message: 'Time entry has ended or is locked.'
+                    });
+                }
+
+                if (result.is_running) {
+                    return res.status(422).json({
+                        message: 'Time entry is already running.'
+                    });
+                }
+            })
+            .then(() => TimeEntry.findByIdAndUpdate(id, {
+                $set: {
+                    'is_running': true,
+                    'resumed_at': properties.resumed_at
+                }
+            }))
+            .then(() => res.status(200).json({
+                message: 'Success.'
+            }))
+            .catch(next);
     },
 
     stop(req, res, next) {
         const id = req.params.id;
         const properties = {
-            stopped_at: req.body.stopped_at
+            ended_at: Date.parse(req.body.ended_at) || Date.now()
         };
+
+        let timeToAdd = 0;
+
+        TimeEntry.findById(id)
+            .orFail(() => Error('Not found'))
+            .then(result => {
+                if (result.ended_at != null || result.locked_at != null) {
+                    return res.status(422).json({
+                        message: 'Time entry has ended or is locked.'
+                    });
+                }
+
+                if (result.is_running) {
+                    if (result.resumed_at == null) {
+                        timeToAdd = (properties.paused_at - result.started_at) / 1000;
+                    } else {
+                        timeToAdd = (properties.paused_at - result.resumed_at) / 1000;
+                    }
+
+                    timeToAdd = Math.round(timeToAdd);
+                } else {
+                    return res.status(422).json({
+                        message: 'Time entry is not running.'
+                    });
+                }
+            })
+            .then(() => TimeEntry.findByIdAndUpdate(id, {
+                $inc: {
+                    'time_worked': timeToAdd
+                },
+                $set: {
+                    'is_running': false,
+                    'ended_at': properties.ended_at
+                },
+                $unset: {
+                    'paused_at': '',
+                    'resumed_at': ''
+                }
+            }))
+            .then(() => res.status(200).json({
+                message: 'Success.'
+            }))
+            .catch(next);
     },
 
     lock(req, res, next) {
         const id = req.params.id;
         const properties = {
-            locked_at: req.body.locked_at
+            locked_at: Date.parse(req.body.locked_at) || Date.now()
         };
+
+        TimeEntry.findById(id)
+            .orFail(() => Error('Not found'))
+            .then(result => {
+                if (result.locked_at != null) {
+                    return res.status(422).json({
+                        message: 'Time entry is already locked.'
+                    });
+                }
+
+                if (result.ended_at == null) {
+                    return res.status(422).json({
+                        message: 'Time entry must be ended first.'
+                    });
+                }
+            })
+            .then(() => TimeEntry.findByIdAndUpdate(id, {
+                $set: {
+                    'locked_at': properties.locked_at
+                },
+                $unset: {
+                    'paused_at': '',
+                    'resumed_at': ''
+                }
+            }))
+            .then(() => res.status(200).json({
+                message: 'Success.'
+            }))
+            .catch(next);
     }
 };
