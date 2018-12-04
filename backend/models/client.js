@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const UniqueValidator = require('mongoose-unique-validator');
 const Schema = mongoose.Schema;
-const SchemaTypes = require('../components/schema_types_component');
+const SchemaTypes = require('../helpers/schema_types_helper');
 
 const ClientSchema = new Schema({
     linked_users: [{

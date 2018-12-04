@@ -1,27 +1,61 @@
+const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
-const UniqueValidator = require('mongoose-unique-validator');
 const Schema = mongoose.Schema;
-const SchemaTypes = require('../components/schema_types_component');
+const SchemaTypes = require('../helpers/schema_types_helper');
+const UniqueValidator = require('mongoose-unique-validator');
 
 const UserSchema = new Schema({
+    method: {
+        type: String,
+        enum: ['local'],
+        required: true
+    },
+    local: {
+        email: {
+            type: String,
+            lowercase: true,
+            required: true,
+            unique: true
+        },
+        password: {
+            type: String,
+            required: true
+        }
+    },
     name: {
         type: String,
         required: [true, 'Name field is required.']
     },
-    email: {
-        type: String,
-        required: [true, 'Email field is required.'],
-        unique: true,
-        dropDups: true
-    },
-    password: {
-        type: String,
-        required: [true, 'Password field is required.']
-    },
-    reset_token: {
-        type: String
-    },
     color: SchemaTypes.Color
+});
+
+UserSchema.pre('save', async function(next) {
+    try {
+        if (this.method !== 'local') next();
+
+        const salt = await bcrypt.genSalt(10);
+        const passwordHash = await bcrypt.hash(this.local.password, salt);
+        this.local.password = passwordHash;
+
+        next();
+    } catch (err) {
+        next(err);
+    }
+});
+
+UserSchema.methods.isValidPassword = async function(password) {
+    try {
+        return await bcrypt.compare(password, this.local.password)
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+UserSchema.method('toJSON', function () {
+    var user = this.toObject();
+    delete user.method;
+    delete user.local;
+    return user;
 });
 
 UserSchema.plugin(UniqueValidator);

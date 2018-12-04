@@ -1,6 +1,15 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+let schemaOptions = {
+    toObject: {
+        virtuals: true
+    },
+    toJSON: {
+        virtuals: true
+    }
+};
+
 const TimeEntrySchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
@@ -44,7 +53,7 @@ const TimeEntrySchema = new Schema({
     locked_at: {
         type: Date
     },
-});
+}, schemaOptions);
 
 const TimeEntry = mongoose.model('time_entry', TimeEntrySchema);
 

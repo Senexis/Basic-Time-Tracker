@@ -51,11 +51,16 @@ module.exports = {
     },
 
     multilock(req, res, next) {
+        // TODO: Implement multilock.
+        
         const id = req.params.id;
         const properties = {
             type: req.body.type,
-            range: req.body.range
+            range_start: req.body.range_start,
+            range_end: req.body.range_end
         };
+
+        return res.status(500).json({ error: 'Not implemented.' });
     },
 
     tag(req, res, next) {
