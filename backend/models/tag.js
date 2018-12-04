@@ -4,6 +4,11 @@ const Schema = mongoose.Schema;
 const SchemaTypes = require('../helpers/schema_types_helper');
 
 const TagSchema = new Schema({
+    author: {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+        required: [true, 'User reference is required.']
+    },
     linked_users: [{
         type: Schema.Types.ObjectId,
         ref: 'user'

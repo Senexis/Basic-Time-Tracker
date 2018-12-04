@@ -9,6 +9,7 @@ module.exports = {
 
     create(req, res, next) {
         const properties = {
+            author: req.user._id,
             name: req.body.name,
             color: req.body.color
         };

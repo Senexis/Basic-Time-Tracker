@@ -10,9 +10,17 @@ module.exports = {
 
     create(req, res, next) {
         const properties = {
-            // name: req.body.name,
-            // color: req.body.color
+            author: req.user._id
         };
+        
+        if (req.body.started_at != null) {
+            properties.started_at = Date.parse(req.body.started_at);
+        }
+
+        if (req.body.ended_at != null) {
+            properties.ended_at = Date.parse(req.body.ended_at);
+            properties.is_running = false;
+        }
 
         TimeEntry.create(properties)
             .then(result => res.json(result))

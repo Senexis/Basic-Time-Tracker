@@ -11,15 +11,14 @@ let schemaOptions = {
 };
 
 const TimeEntrySchema = new Schema({
-    user: {
+    author: {
         type: Schema.Types.ObjectId,
         ref: 'user',
-        // required: [true, 'User reference is required.']
+        required: [true, 'User reference is required.']
     },
     client: {
         type: Schema.Types.ObjectId,
-        ref: 'client',
-        // required: [true, 'Client reference is required.']
+        ref: 'client'
     },
     tags: [{
         type: Schema.Types.ObjectId,
