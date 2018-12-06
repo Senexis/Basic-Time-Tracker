@@ -1,28 +1,36 @@
-<!-- nav -->
-<nav class="navbar navbar-expand navbar-dark bg-dark" *ngIf="currentUser">
-  <div class="navbar-nav">
-      <a class="nav-item nav-link" routerLink="/">Home</a>
-      <a class="nav-item nav-link" (click)="logout()">Logout</a>
-  </div>
+<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+  <a class="navbar-brand col-sm-3 col-md-2 mr-0" routerLink="/">Company name</a>
+  <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+  <ul class="navbar-nav px-3" *ngIf="currentUser">
+    <li class="nav-item text-nowrap">
+      <a class="nav-link" (click)="logout()">Sign out</a>
+    </li>
+  </ul>
 </nav>
 
-<!-- main app container -->
-<div class="jumbotron">
-  <div class="container">
-      <div class="row">
-          <div class="col-md-6 offset-md-3">
-              <router-outlet></router-outlet>
-          </div>
+<div class="container-fluid">
+  <div class="row">
+    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+      <div class="sidebar-sticky">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active" routerLink="/">
+              <span data-feather="home"></span>
+              Dashboard <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span data-feather="file"></span>
+              Orders
+            </a>
+          </li>
+        </ul>
       </div>
-  </div>
-</div>
+    </nav>
 
-<!-- credits -->
-<div class="text-center">
-  <p>
-      <a href="http://jasonwatmore.com/post/2018/11/16/angular-7-jwt-authentication-example-tutorial" target="_top">Angular 7 - JWT Authentication Example & Tutorial</a>
-  </p>
-  <p>
-      <a href="http://jasonwatmore.com" target="_top">JasonWatmore.com</a>
-  </p>
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
 </div>

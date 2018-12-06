@@ -1,4 +1,5 @@
 const bodyParser = require('body-parser'),
+	cors = require('cors'),
 	express = require('express'),
 	mongoose = require('mongoose'),
 	routes = require('./routes/api');
@@ -11,6 +12,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
 	extended: true
 }));
+
+app.use(cors());
 
 const databaseUri = process.env.databaseUri;
 
