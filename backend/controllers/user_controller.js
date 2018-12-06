@@ -4,12 +4,18 @@ const User = require('../models/user');
 require('dotenv').config();
 
 signToken = user => {
-    return JWT.sign({
+    const expires = new Date().setDate(new Date().getDate() + 1);
+    const jwtToken = JWT.sign({
         iss: 'time-management-system',
         sub: user.id,
         iat: new Date().getTime(),
-        exp: new Date().setDate(new Date().getDate() + 1)
+        exp: expires
     }, process.env.jwtSecret);
+
+    return {
+        token: jwtToken,
+        expires: expires
+    };
 }
 
 module.exports = {
@@ -43,16 +49,12 @@ module.exports = {
                 });
             })
             .then(() => newUser.save())
-            .then(() => res.status(200).json({
-                token: signToken(newUser)
-            }))
+            .then(() => res.status(200).json(signToken(newUser)))
             .catch(next);
     },
 
     access(req, res, next) {
-        return res.status(200).json({
-            token: signToken(req.user)
-        });
+        return res.status(200).json(signToken(req.user));
     },
 
     index(req, res, next) {
