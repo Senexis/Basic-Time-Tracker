@@ -3,10 +3,10 @@ const express = require('express'),
 
 const app = express();
 
-app.use(express.static(__dirname + '/dist/client'));
+app.use(express.static(__dirname + '/dist/time-management-system'));
 
 app.all('/*', function (req, res) {
-  res.sendFile(path.join(__dirname + '/dist/client/index.html'));
+  res.sendFile(path.join(__dirname + '/dist/time-management-system/index.html'));
 });
 
 app.listen(process.env.PORT || 5001, () => {
