@@ -19,11 +19,6 @@
   <dd class="col-sm-9">{{ entry.client?.name }}</dd>
 </dl>
 
-<dl *ngIf="entry.tags" class="row">
-  <dt class="col-sm-3">Tags</dt>
-  <dd class="col-sm-9"><a *ngFor="let tag of entry.tags" [routerLink]="['/tags/', tag._id]" class="badge badge-primary">{{ tag.name }}</a></dd>
-</dl>
-
 <dl *ngIf="entry.started_at" class="row">
   <dt class="col-sm-3">Start time</dt>
   <dd class="col-sm-9">{{ entry.started_at | date:'medium' }}</dd>
@@ -54,9 +49,10 @@
   <dd class="col-sm-9">{{ entry.time_worked }}</dd>
 </dl>
 
-<div *ngIf="entry.notes">
-  <h3>Notes</h3>
-  <p>{{ entry.notes }}</p>
+<div *ngIf="entry.notes || entry.tags">
+  <h3>Notes & Tags</h3>
+  <p *ngIf="entry.notes">{{ entry.notes }}</p>
+  <p *ngIf="entry.tags"><a *ngFor="let tag of entry.tags" [routerLink]="['/tags/', tag._id]" class="badge badge-primary">{{ tag.name }}</a></p>
 </div>
 
 <a class="btn btn-primary" routerLink="/time-entries">Go back</a>
