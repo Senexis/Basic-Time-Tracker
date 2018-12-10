@@ -24,7 +24,7 @@ export class DetailComponent implements OnInit {
       });
   }
 
-  deleteProduct(id) {
+  deleteEntry(id) {
     this.isLoading = true;
     this.api.deleteTimeEntry(id)
       .subscribe(_ => {

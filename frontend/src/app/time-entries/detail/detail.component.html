@@ -69,6 +69,6 @@
   <a class="btn btn-sm btn-outline-secondary mr-2" routerLink="/time-entries">Go back</a>
   <div class="btn-group">
     <a class="btn btn-sm btn-outline-secondary" [routerLink]="['/time-entries', entry._id, 'edit']">Edit</a>
-    <button class="btn btn-sm btn-outline-danger" (click)="deleteProduct(entry._id)">Delete</button>
+    <button class="btn btn-sm btn-outline-danger" (click)="deleteEntry(entry._id)">Delete</button>
   </div>
 </div>

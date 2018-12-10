@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Tag } from 'src/app/_models';
+import { TagService } from 'src/app/_services';
 
 @Component({
   selector: 'app-index',
@@ -7,9 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class IndexComponent implements OnInit {
 
-  constructor() { }
+  tags: Tag[];
+  isLoading = true;
+
+  constructor(private api: TagService) { }
 
   ngOnInit() {
+    this.api.getTags()
+      .subscribe(data => {
+        this.tags = data;
+        this.isLoading = false;
+      });
   }
-
 }

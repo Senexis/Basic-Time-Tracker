@@ -30,6 +30,7 @@ export class ClientService {
     }
 
     addClient(client: Client): Observable<Client> {
+        console.log(client);
         return this.http.post<Client>(apiUrl, client, httpOptions).pipe(
             tap(result => console.log(`added Client w/ id=${result._id}`))
         );
