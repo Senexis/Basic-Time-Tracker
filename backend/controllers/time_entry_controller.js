@@ -122,15 +122,19 @@ module.exports = {
 
     tag(req, res, next) {
         const id = req.params.id;
-        const properties = {
+        const find = {
             name: req.body.name
-        }
+        };
+        const properties = {
+            name: req.body.name,
+            author: req.user._id
+        };
 
         let refId;
 
         TimeEntry.findById(id)
             .orFail(() => Error('Not found'))
-            .then(() => Tag.findOneOrCreate(properties, properties))
+            .then(() => Tag.findOneOrCreate(find, properties))
             .then(result => refId = result._id)
             .then(() => TimeEntry.findByIdAndUpdate(id, {
                 "$push": {
