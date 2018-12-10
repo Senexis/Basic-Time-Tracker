@@ -11,13 +11,15 @@ import { Observable } from 'rxjs';
 })
 export class IndexComponent implements OnInit {
 
-  entries: Observable<TimeEntry[]>;
-  isLoading = true;
+  entries: TimeEntry[];
 
   constructor(private api: TimeEntryService) { }
 
   ngOnInit() {
-    this.entries = this.api.getTimeEntries();
+    this.api.getTimeEntries()
+      .subscribe(data => {
+        this.entries = data;
+      });
   }
 
 }

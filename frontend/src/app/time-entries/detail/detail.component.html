@@ -1,3 +1,19 @@
-<p>
-  detail works!
-</p>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+  <h1 class="h2">Time Entries > Details</h1>
+</div>
+
+<dl class="row">
+  <dt class="col-sm-3">Client</dt>
+  <dd class="col-sm-9">{{ entry.client?.name }}</dd>
+
+  <dt class="col-sm-3">Tags</dt>
+  <dd class="col-sm-9"><a *ngFor="let tag of entry.tags" [routerLink]="['/tags/', tag._id]" class="badge badge-primary">{{ tag.name }}</a></dd>
+  
+  <dt class="col-sm-3">Start time</dt>
+  <dd class="col-sm-9">{{ entry.started_at | date:'medium' }}</dd>
+
+  <dt class="col-sm-3">End time</dt>
+  <dd class="col-sm-9">{{ entry.ended_at | date:'medium' }}</dd>
+</dl>
+
+<a class="btn btn-primary" routerLink="/time-entries">Go back</a> <button class="btn btn-danger" (click)="deleteProduct(entry._id)">Delete</button>

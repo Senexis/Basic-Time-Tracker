@@ -17,13 +17,14 @@ export class TimeEntryService {
     constructor(private http: HttpClient) { }
 
     getTimeEntries(): Observable<TimeEntry[]> {
-        return this.http.get<TimeEntry[]>(apiUrl).pipe(
+        const url = `${apiUrl}?include=client`;
+        return this.http.get<TimeEntry[]>(url).pipe(
             tap(_ => console.log('fetched TimeEntries'))
         );
     }
 
     getTimeEntry(id: string): Observable<TimeEntry> {
-        const url = `${apiUrl}/${id}`;
+        const url = `${apiUrl}/${id}?include=all`;
         return this.http.get<TimeEntry>(url).pipe(
             tap(_ => console.log(`fetched TimeEntry id=${id}`))
         );
@@ -44,7 +45,6 @@ export class TimeEntryService {
 
     deleteTimeEntry(id: string): Observable<TimeEntry> {
         const url = `${apiUrl}/${id}`;
-
         return this.http.delete<TimeEntry>(url, httpOptions).pipe(
             tap(_ => console.log(`deleted TimeEntry id=${id}`))
         );

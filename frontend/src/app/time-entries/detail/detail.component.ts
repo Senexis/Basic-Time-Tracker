@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { TimeEntry } from 'src/app/_models';
+import { TimeEntryService } from 'src/app/_services';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-detail',
@@ -7,9 +11,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DetailComponent implements OnInit {
 
-  constructor() { }
+  entry: TimeEntry;
+
+  constructor(private route: ActivatedRoute, private router: Router, private api: TimeEntryService) { }
 
   ngOnInit() {
+    this.api.getTimeEntry(this.route.snapshot.params['id'])
+      .subscribe(data => {
+        this.entry = data;
+      });
+  }
+
+  deleteProduct(id) {
+    this.api.deleteTimeEntry(id)
+      .subscribe(_ => {
+        this.router.navigate(['/time-entries']);
+      });
   }
 
 }
