@@ -1,7 +1,11 @@
 export class User {
-    id: number;
-    email: string;
-    password: string;
+    _id: string;
+    method: string;
+    local: {
+        email: string,
+        password: string
+    };
     name: string;
+    color: string;
     token?: string;
 }

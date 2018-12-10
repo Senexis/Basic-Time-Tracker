@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { env } from '../_helpers';
 import { User } from '../_models';
 
 @Injectable({ providedIn: 'root' })
@@ -20,7 +21,7 @@ export class AuthenticationService {
     }
 
     login(email: string, password: string) {
-        return this.http.post<any>(`https://calm-reef-77150.herokuapp.com/api/users/sign-in`, { email, password })
+        return this.http.post<any>(`${env.apiBase}/api/users/sign-in`, { email, password })
             .pipe(map(user => {
                 // login successful if there's a jwt token in the response
                 if (user && user.token) {

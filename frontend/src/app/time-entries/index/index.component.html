@@ -1,0 +1,24 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+  <h1 class="h2">Time Entries</h1>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Client</th>
+      <th>Tags</th>
+      <th>Started at</th>
+      <th>Ended at</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let entry of entries | async">
+      <th>{{ entry | json }}</th>
+      <td><span class="badge badge-pill badge-primary" *ngFor="let tag of entry.tags">{{ tag | json }}</span></td>
+      <td>{{ entry.started_at | date:'medium' }}</td>
+      <td>{{ entry.ended_at | date:'medium' }}</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>

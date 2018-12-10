@@ -14,15 +14,28 @@
       <div class="sidebar-sticky">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link active" routerLink="/">
-              <span data-feather="home"></span>
-              Dashboard <span class="sr-only">(current)</span>
+            <a class="nav-link" routerLink="/" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="active">
+              Dashboard
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="file"></span>
-              Orders
+            <a class="nav-link" routerLink="/clients" routerLinkActive="active">
+              Clients
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/tags" routerLinkActive="active">
+              Tags
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/time-entries" routerLinkActive="active">
+              Time Entries
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/users" routerLinkActive="active">
+              Users
             </a>
           </li>
         </ul>

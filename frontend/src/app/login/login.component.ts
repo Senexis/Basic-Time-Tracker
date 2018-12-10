@@ -12,8 +12,8 @@ import { AuthenticationService } from '../_services';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
-  loading = false;
-  submitted = false;
+  isLoading = false;
+  isSubmitted = false;
   returnUrl: string;
   error = '';
 
@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
-      email: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
 
@@ -41,14 +41,14 @@ export class LoginComponent implements OnInit {
   get f() { return this.loginForm.controls; }
 
   onSubmit() {
-    this.submitted = true;
+    this.isSubmitted = true;
 
     // stop here if form is invalid
     if (this.loginForm.invalid) {
       return;
     }
 
-    this.loading = true;
+    this.isLoading = true;
     this.authenticationService.login(this.f.email.value, this.f.password.value)
       .pipe(first())
       .subscribe(
@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit {
         },
         error => {
           this.error = error;
-          this.loading = false;
+          this.isLoading = false;
         });
   }
 

@@ -3,16 +3,38 @@ const TimeEntry = require('../models/time_entry');
 
 module.exports = {
     index(req, res, next) {
-        TimeEntry.find({})
-            .then(result => res.json(result))
-            .catch(next);
+        switch (req.query.include) {
+            case 'tags':
+                TimeEntry.find({})
+                    .populate('tags')
+                    .then(result => res.json(result))
+                    .catch(next);
+                break;
+            case 'client':
+                TimeEntry.find({})
+                    .populate('client')
+                    .then(result => res.json(result))
+                    .catch(next);
+                break;
+            case 'all':
+                TimeEntry.find({})
+                    .populate('tags')
+                    .populate('client')
+                    .then(result => res.json(result))
+                    .catch(next);
+                break;
+            default:
+                TimeEntry.find({})
+                    .then(result => res.json(result))
+                    .catch(next);
+        };
     },
 
     create(req, res, next) {
         const properties = {
             author: req.user._id
         };
-        
+
         if (req.body.started_at != null) {
             properties.started_at = Date.parse(req.body.started_at);
         }
@@ -60,7 +82,7 @@ module.exports = {
 
     multilock(req, res, next) {
         // TODO: Implement multilock.
-        
+
         const id = req.params.id;
         const properties = {
             type: req.body.type,
@@ -68,7 +90,9 @@ module.exports = {
             range_end: req.body.range_end
         };
 
-        return res.status(500).json({ error: 'Not implemented.' });
+        return res.status(500).json({
+            error: 'Not implemented.'
+        });
     },
 
     tag(req, res, next) {
