@@ -2,18 +2,62 @@
   <h1 class="h2">Time Entries > Details</h1>
 </div>
 
-<dl class="row">
+<div *ngIf="entry.is_running" class="alert alert-warning" role="alert">
+  This entry is currently actively tracking time. Don't forget to pause or end the entry.
+</div>
+
+<div *ngIf="entry.paused_at && !entry.is_running" class="alert alert-info" role="alert">
+  This entry is currently paused and not tracking time. You can either resume or end this entry.
+</div>
+
+<div *ngIf="entry.ended_at && !entry.locked_at" class="alert alert-info" role="alert">
+  This entry has currently ended but hasn't been locked yet. Please consider locking the entry.
+</div>
+
+<dl *ngIf="entry.client" class="row">
   <dt class="col-sm-3">Client</dt>
   <dd class="col-sm-9">{{ entry.client?.name }}</dd>
+</dl>
 
+<dl *ngIf="entry.tags" class="row">
   <dt class="col-sm-3">Tags</dt>
   <dd class="col-sm-9"><a *ngFor="let tag of entry.tags" [routerLink]="['/tags/', tag._id]" class="badge badge-primary">{{ tag.name }}</a></dd>
-  
+</dl>
+
+<dl *ngIf="entry.started_at" class="row">
   <dt class="col-sm-3">Start time</dt>
   <dd class="col-sm-9">{{ entry.started_at | date:'medium' }}</dd>
+</dl>
 
+<dl *ngIf="entry.paused_at" class="row">
+  <dt class="col-sm-3">Paused at</dt>
+  <dd class="col-sm-9">{{ entry.paused_at | date:'medium' }}</dd>
+</dl>
+
+<dl *ngIf="entry.resumed_at" class="row">
+  <dt class="col-sm-3">Resumed at</dt>
+  <dd class="col-sm-9">{{ entry.resumed_at | date:'medium' }}</dd>
+</dl>
+
+<dl *ngIf="entry.ended_at" class="row">
   <dt class="col-sm-3">End time</dt>
   <dd class="col-sm-9">{{ entry.ended_at | date:'medium' }}</dd>
 </dl>
 
-<a class="btn btn-primary" routerLink="/time-entries">Go back</a> <button class="btn btn-danger" (click)="deleteProduct(entry._id)">Delete</button>
+<dl *ngIf="entry.locked_at" class="row">
+  <dt class="col-sm-3">Locked at</dt>
+  <dd class="col-sm-9">{{ entry.locked_at | date:'medium' }}</dd>
+</dl>
+
+<dl *ngIf="entry.time_worked" class="row">
+  <dt class="col-sm-3">Time worked (in seconds for now)</dt>
+  <dd class="col-sm-9">{{ entry.time_worked }}</dd>
+</dl>
+
+<div *ngIf="entry.notes">
+  <h3>Notes</h3>
+  <p>{{ entry.notes }}</p>
+</div>
+
+<a class="btn btn-primary" routerLink="/time-entries">Go back</a>
+<button class="btn btn-danger" (click)="deleteProduct(entry._id)">Delete</button>
