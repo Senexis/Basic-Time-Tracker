@@ -52,10 +52,35 @@ module.exports = {
     read(req, res, next) {
         const id = req.params.id;
 
-        TimeEntry.findById(id)
-            .orFail(() => Error('Not found'))
-            .then(result => res.json(result))
-            .catch(next);
+        switch (req.query.include) {
+            case 'tags':
+                TimeEntry.findById(id)
+                    .populate('tags')
+                    .orFail(() => Error('Not found'))
+                    .then(result => res.json(result))
+                    .catch(next);
+                break;
+            case 'client':
+                TimeEntry.findById(id)
+                    .populate('client')
+                    .orFail(() => Error('Not found'))
+                    .then(result => res.json(result))
+                    .catch(next);
+                break;
+            case 'all':
+                TimeEntry.findById(id)
+                    .populate('tags')
+                    .populate('client')
+                    .orFail(() => Error('Not found'))
+                    .then(result => res.json(result))
+                    .catch(next);
+                break;
+            default:
+                TimeEntry.findById(id)
+                    .orFail(() => Error('Not found'))
+                    .then(result => res.json(result))
+                    .catch(next);
+        };
     },
 
     edit(req, res, next) {
