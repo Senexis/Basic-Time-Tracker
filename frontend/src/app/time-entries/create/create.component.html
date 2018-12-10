@@ -1,3 +1,55 @@
-<p>
-  create works!
-</p>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+  <h1 class="h2">Time Entries > Create</h1>
+</div>
+
+<!-- <form (ngSubmit)="onSubmit(form.value)"> -->
+<div class="form-group row">
+  <label class="col-sm-2 col-form-label">Client</label>
+  <div class="col-sm-10">
+    <select [disabled]="isLoading" name="client" class="custom-select">
+      <option disabled selected>-- Please select --</option>
+      <option *ngFor="let client of clients" value="{{ client._id }}">{{ client.name }}</option>
+    </select>
+  </div>
+</div>
+<div class="form-group row">
+  <label for="started_at" class="col-sm-2 col-form-label">Started at</label>
+  <div class="col-sm-10">
+    <input [disabled]="isLoading" type="datetime" class="form-control" name="started_at" aria-describedby="started-at-help" />
+    <small id="started-at-help" class="form-text text-muted">
+      Optional. If left empty, the current time will be used.
+    </small>
+  </div>
+</div>
+<div class="form-group row">
+  <label for="ended_at" class="col-sm-2 col-form-label">Ended at</label>
+  <div class="col-sm-10">
+    <input [disabled]="isLoading" type="datetime" class="form-control" name="ended_at" aria-describedby="ended-at-help" />
+    <small id="ended-at-help" class="form-text text-muted">
+      Optional. If left empty, the entry will keep track of time for you until you pause or end it manually, much
+      like a stopwatch.
+    </small>
+  </div>
+</div>
+<div class="form-group row">
+  <label for="notes" class="col-sm-2 col-form-label">Notes</label>
+  <div class="col-sm-10">
+    <textarea [disabled]="isLoading" class="form-control" name="notes" placeholder="Enter your notes here..." rows="5"></textarea>
+  </div>
+</div>
+<div class="form-group row">
+  <label class="col-sm-2 col-form-label">Tags</label>
+  <div class="col-sm-10">
+    <select [disabled]="isLoading" name="tags" class="custom-select" multiple>
+      <option *ngFor="let tag of tags" value="{{ tag._id }}">{{ tag.name }}</option>
+    </select>
+  </div>
+</div>
+<div class="form-group row">
+  <div class="col-sm-2"></div>
+  <div class="col-sm-10">
+    <button [disabled]="isLoading" type="submit" class="btn btn-outline-primary">Create</button>
+    <img *ngIf="isLoading" class="pl-2" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+  </div>
+</div>
+<!-- </form> -->

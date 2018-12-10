@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 export class IndexComponent implements OnInit {
 
   entries: TimeEntry[];
+  isLoading = true;
 
   constructor(private api: TimeEntryService) { }
 
@@ -19,6 +20,7 @@ export class IndexComponent implements OnInit {
     this.api.getTimeEntries()
       .subscribe(data => {
         this.entries = data;
+        this.isLoading = false;
       });
   }
 
