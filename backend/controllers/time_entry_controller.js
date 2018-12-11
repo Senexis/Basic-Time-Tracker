@@ -96,6 +96,10 @@ module.exports = {
         const id = req.params.id;
         const properties = {};
 
+        if (req.body.client != null) {
+            properties.client = req.body.client;
+        }
+
         if (req.body.notes != null) {
             properties.notes = req.body.notes;
         }
