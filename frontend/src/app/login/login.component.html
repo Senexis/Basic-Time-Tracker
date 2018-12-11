@@ -9,7 +9,7 @@
     <input [disabled]="isLoading" type="text" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': isSubmitted && f.email.errors }" />
     <div *ngIf="isSubmitted && f.email.errors" class="invalid-feedback">
       <div *ngIf="f.email.errors.required">This field is required.</div>
-      <div *ngIf="f.email.errors.email">This is not a valid e-mail addres.</div>
+      <div *ngIf="f.email.errors.email">This is not a valid e-mail address.</div>
     </div>
   </div>
   <div class="form-group">
