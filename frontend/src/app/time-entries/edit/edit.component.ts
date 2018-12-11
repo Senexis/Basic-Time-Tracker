@@ -26,13 +26,21 @@ export class EditComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.populateFields();
-
     this.tes.getTimeEntry(this.route.snapshot.params['id'])
-      .subscribe(data => {
-        this.entry = data;
-        this.isLoading = false;
+    .subscribe(data => {
+      this.entry = data;
+
+      this.cs.getClients()
+      .subscribe(clients => {
+        this.clients = clients;
+
+        this.ts.getTags()
+          .subscribe(tags => {
+            this.tags = tags;
+            this.isLoading = false;
+          });
       });
+    });
   }
 
   onSubmit() {
@@ -48,18 +56,5 @@ export class EditComponent implements OnInit {
           this.error = error;
           this.isLoading = false;
         });
-  }
-
-  populateFields() {
-    this.cs.getClients()
-      .subscribe(clients => {
-        this.clients = clients;
-
-        this.ts.getTags()
-          .subscribe(tags => {
-            this.tags = tags;
-            this.isLoading = false;
-          });
-      });
   }
 }

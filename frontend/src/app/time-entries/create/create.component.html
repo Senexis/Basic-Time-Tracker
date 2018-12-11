@@ -8,7 +8,6 @@
     <div class="col-sm-10">
       <select [disabled]="isLoading" class="custom-select" name="client" #clientCtrl="ngModel" [(ngModel)]="entry.client"
         [ngClass]="{ 'is-invalid': !clientCtrl.valid && clientCtrl.errors }">
-        <option disabled selected>-- Please select --</option>
         <option *ngFor="let client of clients" value="{{ client._id }}">{{ client.name }}</option>
       </select>
     </div>
