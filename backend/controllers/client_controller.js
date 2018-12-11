@@ -46,7 +46,7 @@ module.exports = {
             properties.color = req.body.color;
         }
 
-        Client.findByIdAndUpdate(id, properties)
+        Client.findByIdAndUpdate(id, properties, {new: true})
             .orFail(() => Error('Not found'))
             .then(result => res.json(result))
             .catch(next);

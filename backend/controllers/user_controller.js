@@ -99,7 +99,7 @@ module.exports = {
             properties.color = req.body.color;
         }
 
-        User.findByIdAndUpdate(id, properties)
+        User.findByIdAndUpdate(id, properties, {new: true})
             .orFail(() => Error('Not found'))
             .then(result => res.json(result))
             .catch(next);

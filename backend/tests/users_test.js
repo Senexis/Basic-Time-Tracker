@@ -8,12 +8,13 @@ require('dotenv').config()
 let userId;
 let token = null;
 const name = "Test User";
+const updatedName = "Updated User";
 const email = "test@user.com";
 const password = "1234";
 
 chai.use(chaiHttp)
 describe('User API interface', () => {
-    it('should create user', function (done) {
+    it('should create a user', function (done) {
         chai.request(server)
             .post('/api/users/sign-up')
             .set('content-type', 'application/x-www-form-urlencoded')
@@ -27,7 +28,7 @@ describe('User API interface', () => {
                 done()
             })
     })
-    it('should fail to post same user', function (done) {
+    it('should fail to post the same user', function (done) {
         chai.request(server)
             .post('/api/users/sign-up')
             .set('content-type', 'application/x-www-form-urlencoded')
@@ -41,7 +42,7 @@ describe('User API interface', () => {
                 done()
             })
     })
-    it('should login with created user', function (done) {
+    it('should login with a created user', function (done) {
         chai.request(server)
             .post('/api/users/sign-in')
             .set('content-type', 'application/x-www-form-urlencoded')
@@ -56,18 +57,7 @@ describe('User API interface', () => {
                 done();
             })
     })
-    it('should GET self user', function (done) {
-        chai.request(server)
-            .get('/api/users/self')
-            .set('Authorization', token)
-            .end(function (err, res) {
-                res.should.have.status(200)
-                res.body.should.be.a('object')
-                userId = res.body._id
-                done()
-            })
-    })
-    it('should GET all users', function (done) {
+    it('should get all users when logged in', function (done) {
         chai.request(server)
             .get('/api/users')
             .set('Authorization', token)
@@ -78,7 +68,33 @@ describe('User API interface', () => {
                 done()
             })
     })
-    it('should DELETE /api/users/ correctly', function (done) {
+    it('should get self when logged in', function (done) {
+        chai.request(server)
+            .get('/api/users/self')
+            .set('Authorization', token)
+            .end(function (err, res) {
+                res.should.have.status(200)
+                res.body.should.be.a('object')
+                userId = res.body._id
+                done()
+            })
+    })
+    it('should update a user when logged in', function (done) {
+        chai.request(server)
+            .put('/api/users/' + userId)
+            .set('Authorization', token)
+            .set('content-type', 'application/x-www-form-urlencoded')
+            .send({
+                name: updatedName
+            })
+            .end(function (err, res) {
+                res.should.have.status(200)
+                res.body.should.be.a('object')
+                res.text.should.contain(updatedName)
+                done()
+            })
+    })
+    it('should delete a user when logged in', function (done) {
         chai.request(server)
             .delete('/api/users/' + userId)
             .set('Authorization', token)
@@ -88,7 +104,7 @@ describe('User API interface', () => {
                 done();
             })
     })
-    it('should fail to make requests with deleted user', function (done) {
+    it('should fail to make requests with a deleted user', function (done) {
         chai.request(server)
             .get('/api/users')
             .set('Authorization', token)
@@ -97,7 +113,7 @@ describe('User API interface', () => {
                 done()
             })
     })
-    it('should fail to login with deleted user', function (done) {
+    it('should fail to login with a deleted user', function (done) {
         chai.request(server)
             .post('/api/users/sign-in')
             .set('content-type', 'application/x-www-form-urlencoded')

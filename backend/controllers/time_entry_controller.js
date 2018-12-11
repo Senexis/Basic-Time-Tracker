@@ -108,7 +108,7 @@ module.exports = {
             properties.tags = req.body.tags;
         }
 
-        TimeEntry.findByIdAndUpdate(id, properties)
+        TimeEntry.findByIdAndUpdate(id, properties, {new: true})
             .orFail(() => Error('Not found'))
             .then(result => res.json(result))
             .catch(next);
@@ -158,7 +158,7 @@ module.exports = {
                 "$push": {
                     tags: refId
                 }
-            }))
+            }, {new: true}))
             .then(() => res.status(200).json({
                 message: 'Success.'
             }))
@@ -186,9 +186,7 @@ module.exports = {
                 "$pull": {
                     tags: refId
                 }
-            }, {
-                new: true
-            }))
+            }, {new: true}))
             .then(() => res.status(200).json({
                 message: 'Success.'
             }))
@@ -234,7 +232,7 @@ module.exports = {
                     'is_running': false,
                     'paused_at': properties.paused_at
                 }
-            }))
+            }, {new: true}))
             .then(() => res.status(200).json({
                 message: 'Success.'
             }))
@@ -267,7 +265,7 @@ module.exports = {
                     'is_running': true,
                     'resumed_at': properties.resumed_at
                 }
-            }))
+            }, {new: true}))
             .then(() => res.status(200).json({
                 message: 'Success.'
             }))
@@ -317,7 +315,7 @@ module.exports = {
                     'paused_at': '',
                     'resumed_at': ''
                 }
-            }))
+            }, {new: true}))
             .then(() => res.status(200).json({
                 message: 'Success.'
             }))
@@ -353,7 +351,7 @@ module.exports = {
                     'paused_at': '',
                     'resumed_at': ''
                 }
-            }))
+            }, {new: true}))
             .then(() => res.status(200).json({
                 message: 'Success.'
             }))
