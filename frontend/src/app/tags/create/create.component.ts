@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Tag } from 'src/app/_models';
 import { TagService } from 'src/app/_services';
 import { Router } from '@angular/router';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-create',
@@ -9,21 +10,30 @@ import { Router } from '@angular/router';
   styleUrls: ['./create.component.scss']
 })
 export class CreateComponent implements OnInit {
-
-  tag: Tag;
+  tag: Tag = new Tag();
   isLoading = false;
+  isSubmitted = false;
+  error = '';
 
-  constructor(private api: TagService, private router: Router) { }
+  constructor(
+    private router: Router,
+    private api: TagService
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
-  onSubmit(value: Tag) {
-    console.log(value);
-    this.api.addTag(value)
+  onSubmit() {
+    this.isSubmitted = true;
+    this.isLoading = true;
+
+    this.api.addTag(this.tag)
+      .pipe(first())
       .subscribe(res => {
-          const id = res['_id'];
-          this.router.navigate(['/tags', id]);
+        this.router.navigate(['/tags', res['_id']]);
+      },
+        error => {
+          this.error = error;
+          this.isLoading = false;
         });
   }
-
 }

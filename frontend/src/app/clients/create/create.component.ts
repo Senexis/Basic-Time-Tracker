@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Client } from 'src/app/_models';
 import { ClientService } from 'src/app/_services';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 
 @Component({
@@ -11,46 +10,30 @@ import { first } from 'rxjs/operators';
   styleUrls: ['./create.component.scss']
 })
 export class CreateComponent implements OnInit {
-
-  createForm: FormGroup;
+  client: Client = new Client(null, null);
   isLoading = false;
   isSubmitted = false;
   error = '';
 
   constructor(
-    private formBuilder: FormBuilder,
     private router: Router,
     private api: ClientService
   ) { }
 
-  ngOnInit() {
-    this.createForm = this.formBuilder.group({
-      name: ['', Validators.required],
-      color: ['']
-    });
-  }
-
-  // convenience getter for easy access to form fields
-  get f() { return this.createForm.controls; }
+  ngOnInit() {}
 
   onSubmit() {
     this.isSubmitted = true;
-
-    // stop here if form is invalid
-    if (this.createForm.invalid) {
-      return;
-    }
-
     this.isLoading = true;
-    this.api.addClient(new Client(this.f.name.value, this.f.color.value))
+
+    this.api.addClient(this.client)
       .pipe(first())
       .subscribe(res => {
         this.router.navigate(['/clients', res['_id']]);
       },
-      error => {
-        this.error = error;
-        this.isLoading = false;
-      });
+        error => {
+          this.error = error;
+          this.isLoading = false;
+        });
   }
-
 }

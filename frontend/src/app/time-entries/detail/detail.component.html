@@ -59,8 +59,7 @@
 <div *ngIf="entry.notes || entry.tags">
   <h3>Notes & Tags</h3>
   <p *ngIf="entry.notes">{{ entry.notes }}</p>
-  <p *ngIf="entry.tags"><a *ngFor="let tag of entry.tags" [routerLink]="['/tags/', tag._id]" class="badge badge-primary">{{tag.name
-      }}</a></p>
+  <p *ngIf="entry.tags"><a *ngFor="let tag of entry.tags" [routerLink]="['/tags/', tag._id]" class="badge badge-primary mr-1">{{tag.name}}</a></p>
 </div>
 
 <hr>

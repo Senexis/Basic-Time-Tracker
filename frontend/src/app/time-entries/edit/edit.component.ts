@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { TimeEntryService, ClientService, TagService } from 'src/app/_services';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Client, Tag, TimeEntry } from 'src/app/_models';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit',
@@ -9,15 +10,44 @@ import { Client, Tag, TimeEntry } from 'src/app/_models';
   styleUrls: ['./edit.component.scss']
 })
 export class EditComponent implements OnInit {
-
   clients: Client[];
-  tags: Tag[];
+  entry: TimeEntry;
+  error = '';
   isLoading = true;
+  isSubmitted = false;
+  tags: Tag[];
 
-  constructor(private tes: TimeEntryService, private cs: ClientService, private ts: TagService, private router: Router) { }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private tes: TimeEntryService,
+    private cs: ClientService,
+    private ts: TagService
+  ) { }
 
   ngOnInit() {
     this.populateFields();
+
+    this.tes.getTimeEntry(this.route.snapshot.params['id'])
+      .subscribe(data => {
+        this.entry = data;
+        this.isLoading = false;
+      });
+  }
+
+  onSubmit() {
+    this.isSubmitted = true;
+    this.isLoading = true;
+
+    this.tes.updateTimeEntry(this.route.snapshot.params['id'], this.entry)
+      .pipe(first())
+      .subscribe(res => {
+        this.router.navigate(['/time-entries', res['_id']]);
+      },
+        error => {
+          this.error = error;
+          this.isLoading = false;
+        });
   }
 
   populateFields() {
@@ -32,14 +62,4 @@ export class EditComponent implements OnInit {
           });
       });
   }
-
-  onSubmit(value: TimeEntry) {
-    console.log(value);
-    this.tes.addTimeEntry(value)
-      .subscribe(res => {
-          const id = res['_id'];
-          this.router.navigate(['/time-entries', id]);
-        });
-  }
-
 }

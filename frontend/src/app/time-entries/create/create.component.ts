@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TimeEntryService, ClientService, TagService } from 'src/app/_services';
 import { Tag, Client, TimeEntry } from 'src/app/_models';
 import { Router } from '@angular/router';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-create',
@@ -9,15 +10,37 @@ import { Router } from '@angular/router';
   styleUrls: ['./create.component.scss']
 })
 export class CreateComponent implements OnInit {
-
   clients: Client[];
-  tags: Tag[];
+  entry: TimeEntry = new TimeEntry();
+  error = '';
   isLoading = true;
+  isSubmitted = false;
+  tags: Tag[];
 
-  constructor(private tes: TimeEntryService, private cs: ClientService, private ts: TagService, private router: Router) { }
+  constructor(
+    private router: Router,
+    private tes: TimeEntryService,
+    private cs: ClientService,
+    private ts: TagService
+  ) { }
 
   ngOnInit() {
     this.populateFields();
+  }
+
+  onSubmit() {
+    this.isSubmitted = true;
+    this.isLoading = true;
+
+    this.tes.addTimeEntry(this.entry)
+      .pipe(first())
+      .subscribe(res => {
+        this.router.navigate(['/time-entries', res['_id']]);
+      },
+        error => {
+          this.error = error;
+          this.isLoading = false;
+        });
   }
 
   populateFields() {
@@ -32,14 +55,4 @@ export class CreateComponent implements OnInit {
           });
       });
   }
-
-  onSubmit(value: TimeEntry) {
-    console.log(value);
-    this.tes.addTimeEntry(value)
-      .subscribe(res => {
-        const id = res['_id'];
-        this.router.navigate(['/time-entries', id]);
-      });
-  }
-
 }
