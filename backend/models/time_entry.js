@@ -18,7 +18,8 @@ const TimeEntrySchema = new Schema({
     },
     client: {
         type: Schema.Types.ObjectId,
-        ref: 'client'
+        ref: 'client',
+        required: [true, 'Client reference is required.']
     },
     tags: [{
         type: Schema.Types.ObjectId,

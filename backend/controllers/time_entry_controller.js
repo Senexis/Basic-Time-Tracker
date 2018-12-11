@@ -32,7 +32,8 @@ module.exports = {
 
     create(req, res, next) {
         const properties = {
-            author: req.user._id
+            author: req.user._id,
+            client: req.body.client
         };
 
         if (req.body.started_at != null) {
@@ -42,6 +43,14 @@ module.exports = {
         if (req.body.ended_at != null) {
             properties.ended_at = Date.parse(req.body.ended_at);
             properties.is_running = false;
+        }
+
+        if (req.body.notes != null) {
+            properties.notes = req.body.notes;
+        }
+
+        if (req.body.tags != null) {
+            properties.tags = req.body.tags;
         }
 
         TimeEntry.create(properties)
@@ -85,10 +94,15 @@ module.exports = {
 
     edit(req, res, next) {
         const id = req.params.id;
-        const properties = {
-            // name: req.body.name,
-            // color: req.body.color
-        };
+        const properties = {};
+
+        if (req.body.notes != null) {
+            properties.notes = req.body.notes;
+        }
+
+        if (req.body.tags != null) {
+            properties.tags = req.body.tags;
+        }
 
         TimeEntry.findByIdAndUpdate(id, properties)
             .orFail(() => Error('Not found'))
