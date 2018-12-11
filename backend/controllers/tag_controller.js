@@ -9,10 +9,16 @@ module.exports = {
 
     create(req, res, next) {
         const properties = {
-            author: req.user._id,
-            name: req.body.name,
-            color: req.body.color
+            author: req.user._id
         };
+
+        if (req.body.name != null) {
+            properties.name = req.body.name;
+        }
+
+        if (req.body.color != null) {
+            properties.color = req.body.color;
+        }
 
         Tag.create(properties)
             .then(result => res.json(result))
@@ -30,10 +36,15 @@ module.exports = {
 
     edit(req, res, next) {
         const id = req.params.id;
-        const properties = {
-            name: req.body.name,
-            color: req.body.color
-        };
+        const properties = {};
+
+        if (req.body.name != null) {
+            properties.name = req.body.name;
+        }
+
+        if (req.body.color != null) {
+            properties.color = req.body.color;
+        }
 
         Tag.findByIdAndUpdate(id, properties)
             .orFail(() => Error('Not found'))

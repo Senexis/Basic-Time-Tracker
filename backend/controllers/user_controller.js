@@ -21,11 +21,17 @@ signToken = user => {
 module.exports = {
     create(req, res, next) {
         const properties = {
-            email: req.body.email,
-            password: req.body.password,
-            name: req.body.name,
-            color: req.body.color
+            email: req.body.email || req.body.local.email,
+            password: req.body.password || req.body.local.password
         };
+
+        if (req.body.name != null) {
+            properties.name = req.body.name;
+        }
+
+        if (req.body.color != null) {
+            properties.color = req.body.color;
+        }
 
         let foundUser, newUser;
 
@@ -75,11 +81,16 @@ module.exports = {
     edit(req, res, next) {
         const id = req.params.id;
         const properties = {
-            name: req.body.name,
-            email: req.body.email,
-            password: req.body.password,
-            color: req.body.color
+            password: req.body.password
         };
+
+        if (req.body.name != null) {
+            properties.name = req.body.name;
+        }
+
+        if (req.body.color != null) {
+            properties.color = req.body.color;
+        }
 
         User.findByIdAndUpdate(id, properties)
             .orFail(() => Error('Not found'))

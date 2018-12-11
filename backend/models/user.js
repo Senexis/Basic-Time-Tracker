@@ -53,8 +53,7 @@ UserSchema.methods.isValidPassword = async function(password) {
 
 UserSchema.method('toJSON', function () {
     var user = this.toObject();
-    delete user.method;
-    delete user.local;
+    delete user.local.password;
     return user;
 });
 
