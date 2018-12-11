@@ -29,12 +29,9 @@ passport.use(new LocalStrategy({
             "local.email": email
         });
 
-        console.log(user);
         if (!user) return done(null, false);
 
         const isValid = await user.isValidPassword(password);
-
-        console.log(isValid);
         if (!isValid) return done(null, false);
 
         done(null, user);

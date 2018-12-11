@@ -22,18 +22,26 @@ module.exports = {
     create(req, res, next) {
         const properties = {
             email: req.body.email || req.body.local.email,
-            password: req.body.password || req.body.local.password
+            password: req.body.password || req.body.local.password,
+            name: req.body.name
         };
 
-        if (req.body.name != null) {
-            properties.name = req.body.name;
-        }
+        const newUser = new User({
+            method: 'local',
+            local: {
+                email: properties.email,
+                password: properties.password
+            },
+            name: properties.name,
+            color: properties.color
+        });
 
         if (req.body.color != null) {
             properties.color = req.body.color;
+            newUser.color = req.body.color;
         }
 
-        let foundUser, newUser;
+        let foundUser;
 
         User.findOne({
                 "local.email": properties.email
@@ -42,16 +50,6 @@ module.exports = {
             .then(() => {
                 if (foundUser) return res.status(403).json({
                     error: 'Email is already in use.'
-                });
-
-                newUser = new User({
-                    method: 'local',
-                    local: {
-                        email: properties.email,
-                        password: properties.password
-                    },
-                    name: properties.name,
-                    color: properties.color
                 });
             })
             .then(() => newUser.save())
@@ -65,6 +63,15 @@ module.exports = {
 
     index(req, res, next) {
         User.find({})
+            .then(result => res.json(result))
+            .catch(next);
+    },
+
+    self(req, res, next) {
+        const id = req.user._id;
+
+        User.findById(id)
+            .orFail(() => Error('Not found'))
             .then(result => res.json(result))
             .catch(next);
     },
@@ -97,4 +104,13 @@ module.exports = {
             .then(result => res.json(result))
             .catch(next);
     },
+
+    delete(req, res, next) {
+        const id = req.params.id;
+
+        User.findByIdAndDelete(id)
+            .orFail(() => Error('Not found'))
+            .then(result => res.status(204).json(result))
+            .catch(next);
+    }
 };

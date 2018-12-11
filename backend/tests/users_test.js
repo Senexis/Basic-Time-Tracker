@@ -1,79 +1,113 @@
-const chai = require('chai');
-const chaiHttp = require('chai-http');
-const should = chai.should();
-const expect = chai.expect();
-const { session, neo4j } = require('../neodb');
-const app = require('../app');
+const chai = require('chai')
+const chaiHttp = require('chai-http')
+const server = require('../server')
+const should = chai.should()
+const expect = chai.expect()
+require('dotenv').config()
 
-let name = "Hect0r";
-let pwd = "secretPassword";
-let newPwd = "notSoSecretPassword";
+let userId;
+let token = null;
+const name = "Test User";
+const email = "test@user.com";
+const password = "1234";
 
-chai.use(chaiHttp);
-
-describe("The users controller", () => {
-    it("should create users", (done) => {
-        chai.request(app)
-            .post('/api/users')
+chai.use(chaiHttp)
+describe('User API interface', () => {
+    it('should create user', function (done) {
+        chai.request(server)
+            .post('/api/users/sign-up')
             .set('content-type', 'application/x-www-form-urlencoded')
-            .send({username: name, password: pwd})
-            .end((err, res) => {
-                  res.should.have.status(201);
-              done();
-        });
-    });
-    it("must have an email address", (done) => {
-            chai.request(app)
-                .post('/api/users')
-                .set('content-type', 'application/x-www-form-urlencoded')
-                .send({username: name, password: pwd})
-                .end((err, res) => {
-                      res.should.have.status(401);
-                  done();
-            });
-    });
-    it("Update of password requires a correct current password", (done) => {
-        chai.request(app)
-            .put('/api/users/' + name)
+            .send({
+                email: email,
+                password: password,
+                name: name
+            })
+            .end(function (err, res) {
+                res.should.have.status(200)
+                done()
+            })
+    })
+    it('should fail to post same user', function (done) {
+        chai.request(server)
+            .post('/api/users/sign-up')
             .set('content-type', 'application/x-www-form-urlencoded')
-            .send({password: pwd, newPassword: newPwd})
-            .end((err, res) => {
-                res.should.have.status(201);
-                pwd = newPwd;
-            done();
-        });
-    });
-    it("Update that has error returns 401", (done) => {
-        chai.request(app)
-            .put('/api/users/' + name)
+            .send({
+                email: email,
+                password: password,
+                name: name
+            })
+            .end(function (err, res) {
+                res.should.have.status(403)
+                done()
+            })
+    })
+    it('should login with created user', function (done) {
+        chai.request(server)
+            .post('/api/users/sign-in')
             .set('content-type', 'application/x-www-form-urlencoded')
-            .send({password: 'totallyWrongPassword', newPassword: newPwd})
-            .end((err, res) => {
+            .send({
+                email: email,
+                password: password
+            })
+            .end(function (err, res) {
+                res.should.have.status(200);
+                res.body.should.have.property('token');
+                token = res.body.token;
+                done();
+            })
+    })
+    it('should GET self user', function (done) {
+        chai.request(server)
+            .get('/api/users/self')
+            .set('Authorization', token)
+            .end(function (err, res) {
+                res.should.have.status(200)
+                res.body.should.be.a('object')
+                userId = res.body._id
+                done()
+            })
+    })
+    it('should GET all users', function (done) {
+        chai.request(server)
+            .get('/api/users')
+            .set('Authorization', token)
+            .end(function (err, res) {
+                res.should.have.status(200)
+                res.body.should.be.a('array')
+                res.text.should.contain(email)
+                done()
+            })
+    })
+    it('should DELETE /api/users/ correctly', function (done) {
+        chai.request(server)
+            .delete('/api/users/' + userId)
+            .set('Authorization', token)
+            .set('content-type', 'application/x-www-form-urlencoded')
+            .end(function (err, res) {
+                res.should.have.status(204);
+                done();
+            })
+    })
+    it('should fail to make requests with deleted user', function (done) {
+        chai.request(server)
+            .get('/api/users')
+            .set('Authorization', token)
+            .end(function (err, res) {
+                res.should.have.status(401)
+                done()
+            })
+    })
+    it('should fail to login with deleted user', function (done) {
+        chai.request(server)
+            .post('/api/users/sign-in')
+            .set('content-type', 'application/x-www-form-urlencoded')
+            .send({
+                email: email,
+                password: password
+            })
+            .end(function (err, res) {
                 res.should.have.status(401);
-            done();
-        });
-    });
-    it("Delete that has error returns 401", (done) => {
-        chai.request(app)
-            .delete('/api/users/' + name)
-            .set('content-type', 'application/x-www-form-urlencoded')
-            .send({password: 'totallyWrongPassword'})
-            .end((err, res) => {
-                  res.should.have.status(401);
-              done();
-        });
-    });
-    it("Delete that properly works when username and password are provided", (done) => {
-        chai.request(app)
-            .delete('/api/users/' + name)
-            .set('content-type', 'application/x-www-form-urlencoded')
-            .send({password: pwd})
-            .end((err, res) => {
-                  res.should.have.status(204);
-              done();
-        });
-    });
-    // it("Threads and comments of removed user still exist", (done) => {
-    //     done();
-    // });
-});
+                done();
+            })
+    })
+})

@@ -12,6 +12,8 @@ module.exports = (app) => {
         .all(passportSignIn, UserController.access);
 
     app.get('/api/users', passportJWT, UserController.index);
+    app.get('/api/users/self', passportJWT, UserController.self);
     app.get('/api/users/:id', passportJWT, UserController.read);
     app.put('/api/users/:id', passportJWT, UserController.edit);
+    app.delete('/api/users/:id', passportJWT, UserController.delete);
 };
