@@ -12,6 +12,4 @@ Deze items zouden nog gedaan moeten worden buiten de scope van de schoolopdracht
 
 - Statistieken voor dashboard
 - Rapportages
-- ~~Geïmplementeerde time entry locks~~ (Done)
-- ~~Geïmplementeerde time entry pause/resume/end functionaliteit~~ (Done)
 - Geïmplementeerde gebruiker reistijden, tarieven, etc.
