@@ -5,6 +5,7 @@ De volledige uitwerking van het project Time Management System voor het vak "cli
 
 - Let erop dat bij de backend een `.env` bestand aangemaakt moet worden gebaseerd op het bestaande `.env-example` bestand.
 - Let erop dat bij de frontend eerst Angular moet worden gebuild (`ng build --aot --prod`) alvorens het opstarten (`npm start`).
+- Uiteraard moet er in zowel backend en frontend ervoor gezorgd worden dat de dependencies geïnstalleerd zijn door `npm install` te gebruiken.
 
 ## Geheugensteuntjes
 Deze commando's zijn geheugensteuntjes voor het pushen van commits naar Heroku en zijn niet van toepassing op de docent.
