@@ -13,6 +13,7 @@ signToken = user => {
     }, process.env.jwtSecret);
 
     return {
+        _id: user.id,
         token: jwtToken,
         expires: expires
     };

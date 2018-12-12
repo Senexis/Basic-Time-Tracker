@@ -7,9 +7,9 @@ require('dotenv').config()
 
 let userId;
 let token = null;
-const name = "Test User";
-const updatedName = "Updated User";
-const email = "test@user.com";
+const name = "Users Test User";
+const updatedName = "Updated Test User";
+const email = "users-test@user.com";
 const password = "1234";
 
 chai.use(chaiHttp)
