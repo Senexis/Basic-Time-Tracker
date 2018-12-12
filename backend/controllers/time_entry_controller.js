@@ -196,8 +196,12 @@ module.exports = {
     pause(req, res, next) {
         const id = req.params.id;
         const properties = {
-            paused_at: Date.parse(req.body.paused_at) || Date.now()
+            paused_at: Date.now()
         };
+
+        if (req.body.paused_at) {
+            properties.paused_at = Date.parse(req.body.paused_at);
+        }
 
         let timeToAdd = 0;
 
@@ -242,8 +246,12 @@ module.exports = {
     resume(req, res, next) {
         const id = req.params.id;
         const properties = {
-            resumed_at: Date.parse(req.body.resumed_at) || Date.now()
+            resumed_at: Date.now()
         };
+
+        if (req.body.resumed_at) {
+            properties.resumed_at = Date.parse(req.body.resumed_at);
+        }
 
         TimeEntry.findById(id)
             .orFail(() => Error('Not found'))
@@ -275,8 +283,12 @@ module.exports = {
     stop(req, res, next) {
         const id = req.params.id;
         const properties = {
-            ended_at: Date.parse(req.body.ended_at) || Date.now()
+            ended_at: Date.now()
         };
+
+        if (req.body.ended_at) {
+            properties.ended_at = Date.parse(req.body.ended_at);
+        }
 
         let timeToAdd = 0;
 
@@ -325,8 +337,12 @@ module.exports = {
     lock(req, res, next) {
         const id = req.params.id;
         const properties = {
-            locked_at: Date.parse(req.body.locked_at) || Date.now()
+            locked_at: Date.now()
         };
+
+        if (req.body.locked_at) {
+            properties.locked_at = Date.parse(req.body.locked_at);
+        }
 
         TimeEntry.findById(id)
             .orFail(() => Error('Not found'))

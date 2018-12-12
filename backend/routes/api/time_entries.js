@@ -10,7 +10,7 @@ module.exports = (app) => {
     app.put('/api/time-entries/:id', passportJWT, TimeEntryController.edit);
     app.delete('/api/time-entries/:id', passportJWT, TimeEntryController.delete);
 
-    app.post('/api/time-entries/lock', passportJWT, TimeEntryController.multilock);      // Allows locking multiple time entries.
+    // app.post('/api/time-entries/lock', passportJWT, TimeEntryController.multilock);   // Allows locking multiple time entries. [Not implemented]
 
     app.post('/api/time-entries/:id/tag', passportJWT, TimeEntryController.tag);         // Adds or creates a tag for the time entry.
     app.post('/api/time-entries/:id/untag', passportJWT, TimeEntryController.untag);     // Remove a tag from the time entry.
