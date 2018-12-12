@@ -1,5 +1,5 @@
 # TMS_MEAN
-De volledige uitwerking van het project Time Management System voor het vak "client-side web programming individueel".
+De volledige uitwerking van het project Time Management System voor het vak "client-side web programming individueel" door Timo Viveen (2128321) uit klas 23ivt2d4.
 
 ## Opstarten
 
