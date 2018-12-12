@@ -30,7 +30,7 @@ export class UserService {
     }
 
     addUser(user: User): Observable<User> {
-        return this.http.post<User>(apiUrl, user, httpOptions).pipe(
+        return this.http.post<User>(`${apiUrl}/sign-up`, user, httpOptions).pipe(
             tap(result => console.log(`added User w/ id=${result._id}`))
         );
     }
