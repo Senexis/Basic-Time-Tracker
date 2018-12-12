@@ -32,9 +32,52 @@ export class DetailComponent implements OnInit {
       });
   }
 
-  pauseEntry(id) { return; }
-  resumeEntry(id) { return; }
-  stopEntry(id) { return; }
-  lockEntry(id) { return; }
+  pauseEntry(id) {
+    this.isLoading = true;
+    this.api.pauseTimeEntry(id)
+      .subscribe(_ => {
+        this.api.getTimeEntry(this.route.snapshot.params['id'])
+          .subscribe(data => {
+            this.entry = data;
+            this.isLoading = false;
+          });
+      });
+  }
+
+  resumeEntry(id) {
+    this.isLoading = true;
+    this.api.resumeTimeEntry(id)
+      .subscribe(_ => {
+        this.api.getTimeEntry(this.route.snapshot.params['id'])
+          .subscribe(data => {
+            this.entry = data;
+            this.isLoading = false;
+          });
+      });
+  }
+
+  stopEntry(id) {
+    this.isLoading = true;
+    this.api.stopTimeEntry(id)
+      .subscribe(_ => {
+        this.api.getTimeEntry(this.route.snapshot.params['id'])
+          .subscribe(data => {
+            this.entry = data;
+            this.isLoading = false;
+          });
+      });
+  }
+
+  lockEntry(id) {
+    this.isLoading = true;
+    this.api.lockTimeEntry(id)
+      .subscribe(_ => {
+        this.api.getTimeEntry(this.route.snapshot.params['id'])
+          .subscribe(data => {
+            this.entry = data;
+            this.isLoading = false;
+          });
+      });
+  }
 
 }

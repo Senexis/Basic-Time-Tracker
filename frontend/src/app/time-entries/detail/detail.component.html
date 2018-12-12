@@ -19,6 +19,10 @@
   This entry has currently ended but hasn't been locked yet. Please consider locking the entry.
 </div>
 
+<div *ngIf="entry.locked_at" class="alert alert-info" role="alert">
+  This entry is currently locked and cannot be edited.
+</div>
+
 <dl *ngIf="entry.client" class="row">
   <dt class="col-sm-3">Client</dt>
   <dd class="col-sm-9">{{ entry.client?.name }}</dd>
@@ -69,15 +73,15 @@
     <a class="btn btn-sm btn-outline-secondary" routerLink="/time-entries">Go back</a>
   </div>
   <div *ngIf="!entry.ended_at" class="btn-group mr-2">
-    <button [disabled]="!entry.is_running" class="btn btn-sm btn-outline-secondary" (click)="pauseEntry(entry._id)">Pause</button>
-    <button [disabled]="entry.is_running" class="btn btn-sm btn-outline-secondary" (click)="resumeEntry(entry._id)">Resume</button>
-    <button class="btn btn-sm btn-outline-danger" (click)="stopEntry(entry._id)">Stop</button>
+    <button [disabled]="isLoading || !entry.is_running" class="btn btn-sm btn-outline-secondary" (click)="pauseEntry(entry._id)">Pause</button>
+    <button [disabled]="isLoading || entry.is_running" class="btn btn-sm btn-outline-secondary" (click)="resumeEntry(entry._id)">Resume</button>
+    <button [disabled]="isLoading" class="btn btn-sm btn-outline-danger" (click)="stopEntry(entry._id)">Stop</button>
   </div>
   <div *ngIf="entry.ended_at" class="btn-group mr-2">
-    <button [disabled]="entry.locked_at" class="btn btn-sm btn-outline-danger" (click)="lockEntry(entry._id)">Lock</button>
+    <button [disabled]="isLoading || entry.locked_at" class="btn btn-sm btn-outline-danger" (click)="lockEntry(entry._id)">Lock</button>
   </div>
   <div *ngIf="!entry.locked_at" class="btn-group mr-2">
     <a class="btn btn-sm btn-outline-secondary" [routerLink]="['/time-entries', entry._id, 'edit']">Edit</a>
-    <button class="btn btn-sm btn-outline-danger" (click)="deleteEntry(entry._id)">Delete</button>
+    <button [disabled]="isLoading" class="btn btn-sm btn-outline-danger" (click)="deleteEntry(entry._id)">Delete</button>
   </div>
 </div>
