@@ -6,18 +6,21 @@ module.exports = {
         switch (req.query.include) {
             case 'tags':
                 TimeEntry.find({})
+                    .sort('-started_at')
                     .populate('tags')
                     .then(result => res.json(result))
                     .catch(next);
                 break;
             case 'client':
                 TimeEntry.find({})
+                    .sort('-started_at')
                     .populate('client')
                     .then(result => res.json(result))
                     .catch(next);
                 break;
             case 'all':
                 TimeEntry.find({})
+                    .sort('-started_at')
                     .populate('tags')
                     .populate('client')
                     .then(result => res.json(result))
@@ -25,6 +28,7 @@ module.exports = {
                 break;
             default:
                 TimeEntry.find({})
+                    .sort('-started_at')
                     .then(result => res.json(result))
                     .catch(next);
         };
@@ -108,7 +112,9 @@ module.exports = {
             properties.tags = req.body.tags;
         }
 
-        TimeEntry.findByIdAndUpdate(id, properties, {new: true})
+        TimeEntry.findByIdAndUpdate(id, properties, {
+                new: true
+            })
             .orFail(() => Error('Not found'))
             .then(result => res.json(result))
             .catch(next);
@@ -158,7 +164,9 @@ module.exports = {
                 "$push": {
                     tags: refId
                 }
-            }, {new: true}))
+            }, {
+                new: true
+            }))
             .then(() => res.status(200).json({
                 message: 'Success.'
             }))
@@ -186,7 +194,9 @@ module.exports = {
                 "$pull": {
                     tags: refId
                 }
-            }, {new: true}))
+            }, {
+                new: true
+            }))
             .then(() => res.status(200).json({
                 message: 'Success.'
             }))
@@ -236,7 +246,9 @@ module.exports = {
                     'is_running': false,
                     'paused_at': properties.paused_at
                 }
-            }, {new: true}))
+            }, {
+                new: true
+            }))
             .then(() => res.status(200).json({
                 message: 'Success.'
             }))
@@ -273,7 +285,9 @@ module.exports = {
                     'is_running': true,
                     'resumed_at': properties.resumed_at
                 }
-            }, {new: true}))
+            }, {
+                new: true
+            }))
             .then(() => res.status(200).json({
                 message: 'Success.'
             }))
@@ -327,7 +341,9 @@ module.exports = {
                     'paused_at': '',
                     'resumed_at': ''
                 }
-            }, {new: true}))
+            }, {
+                new: true
+            }))
             .then(() => res.status(200).json({
                 message: 'Success.'
             }))
@@ -367,7 +383,9 @@ module.exports = {
                     'paused_at': '',
                     'resumed_at': ''
                 }
-            }, {new: true}))
+            }, {
+                new: true
+            }))
             .then(() => res.status(200).json({
                 message: 'Success.'
             }))
