@@ -303,9 +303,9 @@ module.exports = {
 
                 if (result.is_running) {
                     if (result.resumed_at == null) {
-                        timeToAdd = (properties.paused_at - result.started_at) / 1000;
+                        timeToAdd = (properties.ended_at - result.started_at) / 1000;
                     } else {
-                        timeToAdd = (properties.paused_at - result.resumed_at) / 1000;
+                        timeToAdd = (properties.ended_at - result.resumed_at) / 1000;
                     }
 
                     timeToAdd = Math.round(timeToAdd);
