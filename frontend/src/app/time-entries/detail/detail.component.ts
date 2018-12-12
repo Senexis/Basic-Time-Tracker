@@ -32,4 +32,9 @@ export class DetailComponent implements OnInit {
       });
   }
 
+  pauseEntry(id) { return; }
+  resumeEntry(id) { return; }
+  stopEntry(id) { return; }
+  lockEntry(id) { return; }
+
 }

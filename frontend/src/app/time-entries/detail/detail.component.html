@@ -65,8 +65,18 @@
 <hr>
 
 <div class="btn-toolbar">
-  <a class="btn btn-sm btn-outline-secondary mr-2" routerLink="/time-entries">Go back</a>
-  <div class="btn-group">
+  <div class="btn-group mr-2">
+    <a class="btn btn-sm btn-outline-secondary" routerLink="/time-entries">Go back</a>
+  </div>
+  <div *ngIf="!entry.ended_at" class="btn-group mr-2">
+    <button [disabled]="!entry.is_running" class="btn btn-sm btn-outline-secondary" (click)="pauseEntry(entry._id)">Pause</button>
+    <button [disabled]="entry.is_running" class="btn btn-sm btn-outline-secondary" (click)="resumeEntry(entry._id)">Resume</button>
+    <button class="btn btn-sm btn-outline-danger" (click)="stopEntry(entry._id)">Stop</button>
+  </div>
+  <div *ngIf="entry.ended_at" class="btn-group mr-2">
+    <button [disabled]="entry.locked_at" class="btn btn-sm btn-outline-danger" (click)="lockEntry(entry._id)">Lock</button>
+  </div>
+  <div *ngIf="!entry.locked_at" class="btn-group mr-2">
     <a class="btn btn-sm btn-outline-secondary" [routerLink]="['/time-entries', entry._id, 'edit']">Edit</a>
     <button class="btn btn-sm btn-outline-danger" (click)="deleteEntry(entry._id)">Delete</button>
   </div>

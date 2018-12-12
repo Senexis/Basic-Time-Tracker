@@ -49,4 +49,32 @@ export class TimeEntryService {
             tap(_ => console.log(`deleted TimeEntry id=${id}`))
         );
     }
+
+    pauseTimeEntry(id: string, date?: Date): Observable<any> {
+        const url = `${apiUrl}/${id}/pause`;
+        return this.http.put(url, {paused_at: date}, httpOptions).pipe(
+            tap(_ => console.log(`paused TimeEntry id=${id}`))
+        );
+    }
+
+    resumeTimeEntry(id: string, date?: Date): Observable<any> {
+        const url = `${apiUrl}/${id}/resume`;
+        return this.http.put(url, {resumed_at: date}, httpOptions).pipe(
+            tap(_ => console.log(`resumed TimeEntry id=${id}`))
+        );
+    }
+
+    stopTimeEntry(id: string, date?: Date): Observable<any> {
+        const url = `${apiUrl}/${id}/stop`;
+        return this.http.put(url, {ended_at: date}, httpOptions).pipe(
+            tap(_ => console.log(`stopped TimeEntry id=${id}`))
+        );
+    }
+
+    lockTimeEntry(id: string, date?: Date): Observable<any> {
+        const url = `${apiUrl}/${id}/lock`;
+        return this.http.put(url, {locked_at: date}, httpOptions).pipe(
+            tap(_ => console.log(`locked TimeEntry id=${id}`))
+        );
+    }
 }
