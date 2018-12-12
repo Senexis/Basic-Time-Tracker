@@ -18,7 +18,7 @@
       <input [disabled]="isLoading" type="datetime" class="form-control" placeholder="YYYY-MM-DDTHH:MM:SS.000Z" aria-describedby="started-at-help" name="started_at"
         #startedAtCtrl="ngModel" [(ngModel)]="entry.started_at" [ngClass]="{ 'is-invalid': !startedAtCtrl.valid && startedAtCtrl.errors }" />
       <small id="started-at-help" class="form-text text-muted">
-        Optional. If left empty, the current time will be used.
+        Optional. If left empty, the current time will be used. [TODO: Use proper datetime picker.]
       </small>
     </div>
   </div>
@@ -29,7 +29,7 @@
         #endedAtCtrl="ngModel" [(ngModel)]="entry.ended_at" [ngClass]="{ 'is-invalid': !endedAtCtrl.valid && endedAtCtrl.errors }" />
       <small id="ended-at-help" class="form-text text-muted">
         Optional. If left empty, the entry will keep track of time for you until you pause or end it manually, much
-        like a stopwatch.
+        like a stopwatch. [TODO: Use proper datetime picker.]
       </small>
     </div>
   </div>
