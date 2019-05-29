@@ -1,21 +1,17 @@
-# TMS_MEAN
-De volledige uitwerking van het project Time Management System voor het vak "client-side web programming individueel" door Timo Viveen (2128321) uit klas 23ivt2d4.
+# Basic Time Tracker App
+A really basic, simple time management app built using a full MEAN stack. This version is **incomplete** but it served its purpose as a school assignment.
 
-## Opstarten
+## Getting set up
+Here's the instructions for getting this set up and running.
 
-- Let erop dat bij de backend een `.env` bestand aangemaakt moet worden gebaseerd op het bestaande `.env-example` bestand.
-- Let erop dat bij de frontend eerst Angular moet worden gebuild (`ng build --aot --prod`) alvorens het opstarten (`npm start`).
-- Uiteraard moet er in zowel backend en frontend ervoor gezorgd worden dat de dependencies geïnstalleerd zijn door `npm install` te gebruiken.
+1. In both the `backend` and `frontend` folders, install the dependencies using `npm install`.
+2. Create a `.env` environment file in the `backend` folder, then run `npm start`.
+3. In the `frontend` folder, run `ng build --aot --prod` to build the Angular frontend, then run `npm start`.
 
-## Geheugensteuntjes
-Deze commando's zijn geheugensteuntjes voor het pushen van commits naar Heroku en zijn niet van toepassing op de docent.
+## TODOs
+Here's some stuff I planned for this version, but never got around to implementing. If you'd like to implement these, go right ahead. You might even make a cool app from it all!
 
-- `git subtree push --prefix frontend heroku-frontend master`
-- `git subtree push --prefix backend heroku-backend master`
-
-## Productie todo's
-Deze items zouden nog gedaan moeten worden buiten de scope van de opdracht om volledig in gebruik genomen te worden en zijn niet van toepassing op de docent.
-
-- Statistieken voor dashboard
-- Rapportages
-- Geïmplementeerde gebruiker reistijden, tarieven, etc.
+- Time statistics on the Dashboard
+- Time reports using graphs, bars, numbers, and all that fun stuff
+- Implemented travel times, rates, wages, and other fancy numbers
+- An improved date/time picker
